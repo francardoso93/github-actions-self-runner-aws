@@ -1,4 +1,3 @@
-# A lot of these stuff is required to execute data_user after everyboot
 Content-Type: multipart/mixed; boundary="//"
 MIME-Version: 1.0
 
