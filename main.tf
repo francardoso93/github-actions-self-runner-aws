@@ -79,8 +79,8 @@ data "aws_ami" "ubuntu" {
 data "template_file" "runner_server" {
   template = file("agent.sh")
   vars = {
-    repo = var.repo
-    token = var.token
+    repo        = var.repo
+    token       = var.token
     runner_name = var.runner_name
   }
 }
@@ -88,9 +88,24 @@ data "template_file" "runner_server" {
 resource "aws_instance" "self_runner" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t2.medium"
-  subnet_id     = module.vpc.private_subnets[0] # Troubleshooting: Enable SSH by placing it at subnet_id = module.vpc.public_subnets[0] with permissive vpc_security_group_ids and key_name
+  subnet_id     = module.vpc.private_subnets[0]
   user_data     = data.template_file.runner_server.rendered
   tags = {
     Name = "GitHubActionsSelfRunnerIPFSAwsInfra"
   }
 }
+
+#########  Just for troubleshoot (Accessible SSH instance)
+# resource "aws_instance" "self_runner" {
+#   ami           = data.aws_ami.ubuntu.id
+#   instance_type = "t2.medium"
+#   subnet_id     = module.vpc.public_subnets[0]
+
+#   tags = {
+#     Name = "GitHubActionsSelfRunnerIPFSAwsInfra"
+#   }
+#   user_data              = data.template_file.runner_server.rendered
+#   vpc_security_group_ids = ["sg-052cf424f9878f8f8"]
+#   key_name               = "management-ipfs-elastic"
+# }
+########
