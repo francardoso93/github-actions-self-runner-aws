@@ -3,6 +3,7 @@ rm /var/lib/cloud/instances/*/sem/config_scripts_user;
 sudo -u ubuntu bash << EOF
 date >> /home/ubuntu/current_datetime.txt # Troubleshoot
 sudo apt install unzip -y
+sudo apt-get install awscli -y
 mkdir /home/ubuntu/actions-runner || true; 
 cd /home/ubuntu/actions-runner;
 curl -o actions-runner-linux-x64-2.287.1.tar.gz -L https://github.com/actions/runner/releases/download/v2.287.1/actions-runner-linux-x64-2.287.1.tar.gz  || true;
