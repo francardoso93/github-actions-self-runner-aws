@@ -79,9 +79,10 @@ data "aws_ami" "ubuntu" {
 data "template_file" "runner_server" {
   template = file("agent.sh")
   vars = {
-    repo        = var.repo
-    token       = var.token
-    runner_name = var.runner_name
+    repo           = var.repo
+    token          = var.token
+    runner_name    = var.runner_name
+    runner_version = "2.295.0"
   }
 }
 
@@ -89,7 +90,7 @@ resource "aws_instance" "self_runner" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t2.medium"
   subnet_id     = module.vpc.private_subnets[0]
-  user_data     = data.template_file.runner_server.rendered
+  user_data     = data.template_file.runner_server.rendered # TODO: Replace installs by a packer generated AMI
   tags = {
     Name = "GitHubActionsSelfRunnerIPFSAwsInfra"
   }
